@@ -1,3 +1,5 @@
+/* Etape 3 */
+
 //Requête de l'API avec fetch
 fetch('http://localhost:3000/api/products')
 .then((response) => response.json())
@@ -6,7 +8,7 @@ console.log(data)
 
 //Affichage des produits avec une boucle for
 for (let i = 0; i < data.length; i += 1) {
-    //Déclaration des variables + affectation + création des éléments
+    //Déclaration des variables + affectation + création des éléments (L54 HTML)
     let product = document.createElement('article');
     let link = document.createElement('a');
     let image = document.createElement('img');
@@ -14,8 +16,8 @@ for (let i = 0; i < data.length; i += 1) {
     let description = document.createElement('p');
 
     document.getElementById('items').appendChild(link); 
-
-        link.href = './product.html?id=' + data.id  // Lien vers le produit 
+        // Lien vers le produit:
+        link.href = './product.html?id=' + data.id;
 
      // Création de l'enfant Product qui a pour parent Link (a)   
     link.appendChild(product);
