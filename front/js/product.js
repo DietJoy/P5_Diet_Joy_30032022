@@ -11,10 +11,13 @@ console.log(data)
 // Utilisation d'URLSearchParams.get (pour passer l’id d’une page à une autre)
 let idProduct = new URL(window.location.href).searchParams.get('id');
 
-// coder que idProduct doit être egal à son id 
 
+/* Etape 5 : Récuperer l'id du produit à afficher*/
+ let findProduct = () => {
+     return data.find((product) => product._id === idProduct);
+  };
 
-
+  let myProduct = findProduct();
 
 
 }) // Fermeture de fetch
