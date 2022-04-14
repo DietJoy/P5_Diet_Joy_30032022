@@ -4,7 +4,7 @@
 fetch('http://localhost:3000/api/products')
 .then((response) => response.json())
 .then((data) => {
-console.log(data)
+    
 
 //Affichage des produits avec une boucle for
 for (let i = 0; i < data.length; i += 1) {
@@ -16,8 +16,10 @@ for (let i = 0; i < data.length; i += 1) {
     let description = document.createElement('p');
 
     document.getElementById('items').appendChild(link); 
-        // Lien vers le produit:
-        link.href = './product.html?id=' + data.id;
+        // Lien vers le produit et Étape 5 : Récupérer l’id du produit à afficher 
+        // Rappel : Dans le back/routes/product.js : ligne7 : router.get('/:id', productCtrl.getOneProduct);
+        link.href = './product.html?id=' + data[i]._id;
+        
 
      // Création de l'enfant Product qui a pour parent Link (a)   
     link.appendChild(product);
