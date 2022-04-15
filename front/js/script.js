@@ -24,7 +24,7 @@ for (let i = 0; i < data.length; i += 1) {
      // Création de l'enfant Product qui a pour parent Link (a)   
     link.appendChild(product);
 
-    //Création des enfants : Image, Title et Description qui ont pour parent: Product (article)
+    //Ajout des éléments (enfants) : Image, Title et Description qui ont pour parent: Product (article)
     product.appendChild(image);
     image.src = data[i].imageUrl;
     image.alt = data[i].altTxt;
