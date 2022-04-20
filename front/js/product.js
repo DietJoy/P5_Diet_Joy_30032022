@@ -48,7 +48,7 @@ seeProduct(data);
     alert('Le serveur ne répond pas, si le problème persiste, contactez : support@name.com');
   });
  
-  /* Etape 7 : Ajouter des produits dans le panier */
+/* Etape 7 : Ajouter des produits dans le panier */
 
   // Créer un produit
   let createProduct = () => {
@@ -77,6 +77,16 @@ seeProduct(data);
     }, 2000);
   };  
 
+    //Confirmation d'ajout au panier
+    var addProductAlert = () => {
+    alert.insertAdjacentHTML(
+    'afterend',
+          `<span id ='alert' style='text-align: center; font-weight: bold; color: #3d4c68'>
+          <br>Article(s) bien ajouté(s) au panier, merci !</span>`
+          );
+    endAlert();
+    }
+
   
 //Prévenir le client qu'il ne peut pas commander plus de 100 fois le même produit
 	var maxLimitAlert = () => {
@@ -96,32 +106,32 @@ seeProduct(data);
      endAlert();
    }
 
-  } // Fermeture de l'accoolade var errorAlert ligne70
+} // Fermeture de l'accolade var errorAlert ligne70
 
    
   // Ajout (Stockage) du produit dans le local storage avec setItem
   let addProductInLocalStorage = () => {
      productInLocalStorage.push(optionProduct);
      localStorage.setItem('product', JSON.stringify(productInLocalStorage));
-    /* affichage d un message ? */
+    addProductAlert();
   }
   
   // Modifie un produit sélectionné dans le local storage
   let modifyProductInLocalStorage = (i) => {
     productInLocalStorage[i].quantity = parseInt(productInLocalStorage[i].quantity);
     optionProduct.quantity = parseInt(optionProduct.quantity);
-  }
+  
+        // Prévient et Empeche qu'un produit soit ajouté plus de 100 fois
+        let beforeMoreAfterAddProductInLocalStorage = optionProduct.quantity + productInLocalStorage[i].quantity;
 
-  // Prévient et Empeche qu'un produit soit ajouté plus de 100 fois
-  let beforeMoreAfterAddProductInLocalStorage = optionProduct.quantity + productInLocalStorage[i].quantity;
+        if (beforeMoreAfterAddProductInLocalStorage >= 101) {
+        maxLimitAlert();
+        //Sinon Ajouter un produit dans le locale storage
+        } else {
+        productInLocalStorage[i].quantity += optionProduct.quantity;
+        localStorage.setItem('product', JSON.stringify(productInLocalStorage));
+        addProductAlert();
+        };
+  }; // Fermeture let modifyProductInLocalStorage ligne120
 
-  if (beforeMoreAfterAddProductInLocalStorage >= 101) {
-      maxLimitAlert();
-  //Sinon Ajouter un produit dans le locale storage
-  } else {
-    productInLocalStorage[i].quantity += optionProduct.quantity;
-    localStorage.setItem('product', JSON.stringify(productInLocalStorage));
-    /* affichage d un message ? */
-  }
-
-  } // Accolade de fin de la ligne 54 (let createProduct) 
+  }; // Accolade de fin de la ligne 54 (let createProduct) 
