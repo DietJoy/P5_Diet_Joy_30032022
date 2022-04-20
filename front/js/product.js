@@ -159,6 +159,27 @@ seeProduct(data);
   };
       }; //Fermeture else ligne 135 
 
+//GESTION DU PANIER
+//Cliquer pour envoyer dans le panier
+let sendToCart = document.querySelector('#addToCart');
+sendToCart.addEventListener('click', (e) => {
+    e.preventDefault();
+	createProduct();
+});
 
+//Indique la quantité de produit dans le panier
+let numberProductsInCart = () => {
+let cart = document.getElementsByTagName('nav')[0].getElementsByTagName('li')[1];
+let productInLocalStorage = JSON.parse(localStorage.getItem('product'));
+let numberProducts = 0;
+
+for (let q in productInLocalStorage) {
+    let quantityProductsInLocalStorage = parseInt(productInLocalStorage[q].quantity);
+    numberProducts += quantityProductsInLocalStorage
+};
+
+cart.innerHTML = `Panier <span id='numberProductsInCart' style='color: '#3d4c68;'>( ${numberProducts} )</span>`;
+};
+numberProductsInCart();
 
 }; // Fermeture de la ligne 54 (let createProduct) 
