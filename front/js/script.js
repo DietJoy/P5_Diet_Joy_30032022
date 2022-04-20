@@ -44,4 +44,19 @@ for (let i = 0; i < data.length; i += 1) {
     alert('Le serveur ne répond pas, si le problème persiste, contactez : support@name.com');
      console.log(error)
   });
+
+//Indique la quantité de produit dans le panier
+let numberProductsInCart = () => {
+	let cart = document.getElementsByTagName('nav')[0].getElementsByTagName('li')[1];
+	let productInLocalStorage = JSON.parse(localStorage.getItem('product'));
+	let numberProducts = 0;
+
+	for (let q in productInLocalStorage) {
+		let quantityProductsInLocalStorage = parseInt(productInLocalStorage[q].quantity);
+		numberProducts += quantityProductsInLocalStorage
+	};
+
+	cart.innerHTML = `Panier  <span id='numberProductsInCart' style='color: '#3d4c68;'>( ${numberProducts} )</span>`;
+};
+numberProductsInCart();
  

@@ -158,14 +158,15 @@ seeProduct(data);
     };
   };
       }; //Fermeture else ligne 135 
+}; // Fermeture de la ligne 54 (let createProduct) 
+
 
 //GESTION DU PANIER
 //Cliquer pour envoyer dans le panier
 let sendToCart = document.querySelector('#addToCart');
-sendToCart.addEventListener('click', (e) => {
-    e.preventDefault();
-	createProduct();
-});
+if(sendToCart){
+  sendToCart.addEventListener('click', swapper, false);
+}
 
 //Indique la quantité de produit dans le panier
 let numberProductsInCart = () => {
@@ -182,4 +183,4 @@ cart.innerHTML = `Panier <span id='numberProductsInCart' style='color: '#3d4c68;
 };
 numberProductsInCart();
 
-}; // Fermeture de la ligne 54 (let createProduct) 
+
