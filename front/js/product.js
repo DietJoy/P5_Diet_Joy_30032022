@@ -79,36 +79,30 @@ seeProduct(data);
 
     //Confirmation d'ajout au panier
     var addProductAlert = () => {
-    alert.insertAdjacentHTML(
-    'afterend',
+    alert.insertAdjacentHTML ('afterend',
           `<span id ='alert' style='text-align: center; font-weight: bold; color: #3d4c68'>
-          <br>Article(s) bien ajouté(s) au panier, merci !</span>`
-          );
+          <br>Article(s) bien ajouté(s) au panier, merci !</span>`);
     endAlert();
     }
-
   
 //Prévenir le client qu'il ne peut pas commander plus de 100 fois le même produit
 	var maxLimitAlert = () => {
-		alert.insertAdjacentHTML(
-			'afterend',
+		alert.insertAdjacentHTML ('afterend',
             `<span id ='alert' style='text-align: center; font-weight: bold; color: #3d4c68'>
-            <br>Pour toutes commandes de plus de 100 articles identiques, merci de directement nous contacter</span>`
-            );
+            <br>Pour toutes commandes de plus de 100 articles identiques, merci de directement nous contacter</span>`);
 		endAlert();
 	}
 
    //Alerte pour les quantités : non sélectonnées OU supérieur à 100
    if (optionProduct.quantity <= 0 || optionProduct.quantity >= 101) {
-     alert.insertAdjacentHTML ( 'afterend', 
-     `<span id = 'alert' style='text-align: center; font-weight: bolder; color: #3d4c68'>
-     <br>Veuillez choisir une quantité strictement comprise entre 1 et 100</span>`);
+     alert.insertAdjacentHTML ('afterend', 
+        `<span id = 'alert' style='text-align: center; font-weight: bolder; color: #3d4c68'>
+        <br>Veuillez choisir une quantité strictement comprise entre 1 et 100</span>`);
      endAlert();
    }
 
 } // Fermeture de l'accolade var errorAlert ligne70
-
-   
+ 
   // Ajout (Stockage) du produit dans le local storage avec setItem
   let addProductInLocalStorage = () => {
      productInLocalStorage.push(optionProduct);
@@ -132,6 +126,39 @@ seeProduct(data);
         localStorage.setItem('product', JSON.stringify(productInLocalStorage));
         addProductAlert();
         };
-  }; // Fermeture let modifyProductInLocalStorage ligne120
+  }; // Fermeture let modifyProductInLocalStorage ligne114
 
-  }; // Accolade de fin de la ligne 54 (let createProduct) 
+//Si couleurs ou quantités non ou mal choisis, prévenir le client 
+    if (optionProduct.colors == '' || optionProduct.quantity <= 0 || optionProduct.quantity > 100) {
+    errorAlert();
+    //Sinon on ajoute un ou plusieurs produits
+    }  else {
+      //Si le panier est vide, création d'un tableau pour y ajouter le produit
+      if (!productInLocalStorage) {
+      productInLocalStorage = [];
+      addProductInLocalStorage();
+
+      //Permet d'actualisé le panier lors d'un ajout de produit
+        setTimeout("location.reload(true);",2000);
+      }
+  //Sinon on cherche dans le panier si un produit est déjà présent
+  else {
+    let index = productInLocalStorage.findIndex((p) => p.colors === optionProduct.colors && p._id === optionProduct._id);
+
+    //Si le produit à déjà été ajouté, sa quantité est modifié
+    if (index !== -1) {
+      modifyProductInLocalStorage(index);
+
+      //Permet d'actualisé le panier lors d'un ajout de produit
+      setTimeout("location.reload(true);",2000);
+    }
+  //Sinon ajout du nouveau produit
+  else {
+      addProductInLocalStorage();
+    };
+  };
+      }; //Fermeture else ligne 135 
+
+
+
+}; // Fermeture de la ligne 54 (let createProduct) 
