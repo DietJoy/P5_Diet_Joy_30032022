@@ -1,13 +1,17 @@
+//Etape 4 : faire le lien entre un produit de la page d'accueil et la page produit
+//Utiliser serchParams:
+const idProduct = new URL(window.location.href).searchParams.get('id');
 
-let idProduct = new URL(window.location.href).searchParams.get('id');
 
+//Etape 6: Insérer un produit et ses détails dans la page produit 
+//Création d'une fonction displayProduct pour afficher le produit sur la page
 function displayProduct(myProduct) {
-  let productImg = document.createElement('img');
-  let productName = document.getElementsByTagName('title');
-  let title = document.querySelector('#title');
-  let price = document.querySelector('#price');
-  let description = document.querySelector('#description');
-  let colors = document.querySelector('#colors');
+  const productImg = document.createElement('img');
+  const productName = document.getElementsByTagName('title');
+  const title = document.querySelector('#title');
+  const price = document.querySelector('#price');
+  const description = document.querySelector('#description');
+  const colors = document.querySelector('#colors');
 
   //Affichage du produit
   document.querySelector('.item__img').appendChild(productImg);
@@ -38,16 +42,49 @@ function fetchOneProduct() {
 
 fetchOneProduct();
 
-function addToCart(){
-  window.onload=function(){
-  const addCart = document.getElementById('addToCart');
-  //au clic on lance la fonction addPanier
-  addCart.addEventListener('click', saveProduct);
-}
-}
+//Etape 7: Ajouter des produits dans le panier
 //Récupérer le produit en cours sur la page produit
-//Sauvegarder dans le local storage avec set item
-//Avant une sauvegarde de produit vérifier qu'il n'existe pas déjà dans le locale storage avec la méthode find, 
+
+function addToCart() {
+ window.onload=function(){
+  const buttonHtml = document.getElementById('addToCart');
+  //au clic on lance la fonction Ajouter au Panier
+  buttonHtml.addEventListener ('click', function () {
+
+
+//Conditions de commande pour le client :
+// Sélectionner une couleur ET saisir une quantité supérieur à 0 et inférieur à 100
+
+const colorsHtml = document.getElementById("colors");
+let colorsSelect = colorsHtml.value;
+
+const quantityHtml = document.getElementById("quantity");
+let quantitySelect = quantityHtml.value;
+
+if (colorsSelect == "" || quantitySelect <= 0 || quantitySelect > 100) {
+  newAlert.style.color = "#3d4c68";
+  newAlert.innerText = "Pour ajouter votre article, veuillez selectionner une couleur proposée et une quantité comprise entre 1 et 100, merci";
+  
+  //Si la selection du client est conforme :
+  } else {
+    // objet : sélection du client
+    let productSelect = {
+      color: colorsSelect,
+      quantity: Number(quantitySelect),
+      id: idProduct,
+    };
+
+    newAlert.style.color = "inherit"; // Pour toutes les alertes qui suivent
+
+/*Sauvegarder dans le local storage avec set item,
+Avant une sauvegarde de produit vérifier qu'il n'existe pas déjà dans le locale storage avec la méthode find*/ 
+    
+  }
+});
+}
+}
+
+
 function saveProduct (){
   console.log('TOTOTOTOTO')
 }

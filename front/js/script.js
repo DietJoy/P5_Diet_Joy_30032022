@@ -43,6 +43,7 @@ function fetchAllProducts() {
 
 fetchAllProducts();
 
+//Affichage d'un compteur pour le panier de la page d'acueil
 function numberProductsInCart() {
   let cart = document
     .getElementsByTagName('nav')[0]
