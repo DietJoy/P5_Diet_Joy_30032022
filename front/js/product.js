@@ -42,62 +42,84 @@ function fetchOneProduct() {
 
 fetchOneProduct();
 
-//Etape 7: Ajouter des produits dans le panier
-//Récupérer le produit en cours sur la page produit
+// Étape 7 : Ajouter des produits dans le panier
+
+// Fonction sauvegarder le panier qui récupère le panier et l'envoie dans le localStorage
+function saveBasket(basket) {
+    localStorage.setItem("product", JSON.stringify(basket));
+}
+
+// Fonction pour récupèrer le panier dans le localStorage. Si il est vide, on retourne un array, si il y a des éléments, on retourne le panier
+function getBasket() {
+    let basket = localStorage.getItem("product");
+    if (basket == null) {
+        return [];
+    }
+    else {
+        return JSON.parse(basket);
+    }
+}
+
+// Fonction pour ajouter un produit au panier
+function addBasket(product) {
+    // On met le contenu du panier dans la variable basket
+    let basket = getBasket();
+    // On regarde si le produit ajouté au panier existe dans la même couleur ou pas
+    let foundProduct = basket.find(element => element.id == product.id && element.color == product.color);
+    // Si oui, on met à jour la quantité
+    if (foundProduct != undefined) {
+        let newQuantity = parseInt(foundProduct.quantity) + parseInt(product.quantity);
+        foundProduct.quantity = newQuantity;
+        location.reload();
+        window.confirm(`Votre panier a été mis à jour de ${quantity} ${title.textContent} ${color}`);
+
+    }
+    // Si non, on ajoute le produit au panier
+    else {
+        product.quantity = quantity;
+        basket.push(product);
+        location.reload();
+        window.confirm(`Votre commande de ${quantity} ${title.textContent} ${color} est ajoutée au panier`);
+    }
+    saveBasket(basket);
+}
 
 function addToCart() {
- window.onload=function(){
-  const buttonHtml = document.getElementById('addToCart');
-  //au clic on lance la fonction Ajouter au Panier
-  buttonHtml.addEventListener ('click', function () {
+    // On récupère la quantité choisie par l'utilisateur
+    document.getElementById("quantity").addEventListener('change', (event) => {
+        quantity = event.target.value;
+    });
 
+    // On récupère la couleur choisie par l'utilisateur
+    document.getElementById("colors").addEventListener('change', (event) => {
+        color = event.target.value;
+    });
 
-//Conditions de commande pour le client :
-// Sélectionner une couleur ET saisir une quantité supérieur à 0 et inférieur à 100
+    // On écoute le clic du bouton addToCart
+    document.getElementById("addToCart").addEventListener('click', result => {
+        // on vérifie que la couleur est choisie et que la quantité est comprise entre 0 et 100
+        if (color != "" && quantity <= 100 && quantity != 0) {
+            const product = {
+                id: idProduct ,
+                color: color,
+                quantity: quantity,
+                price: document.getElementById("price").textContent,
+                name: document.title,
+                img: document.querySelector(".item__img").innerHTML
+            };
 
-const colorsHtml = document.getElementById("colors");
-let colorsSelect = colorsHtml.value;
+            getBasket();
+            addBasket(product);
+        }
+        // Si l'utilisateur n'a pas choisi de couleur, on lui indique de le faire
+        else {
+            window.confirm("Veuillez sélectionner une couleur et une quantité comprise entre 1 et 100");
+        }
 
-const quantityHtml = document.getElementById("quantity");
-let quantitySelect = quantityHtml.value;
-
-//Gestion des alertes:
-const newAlert = document.createElement("p")
-newAlert.style.color = "#3d4c68";
-document.querySelector(".item").replaceChild(newAlert, document.querySelector("article"));
-/*Faire en sorte que l'alerte disparaisse apres affichage
-const endNewAlert = () => {
-  let endNewAlert = document.querySelector("#newAlert");
-  setTimeout(function () {
-      endNewAlert.remove();
-  }, 2500);
-};*/
-
-
-if (colorsSelect == "" || quantitySelect <= 0 || quantitySelect > 100) {
-  newAlert.innerText = "Pour ajouter votre article, veuillez selectionner une couleur proposée et une quantité comprise entre 1 et 100, merci";
-  /* endNewAlert(); */
-  
-  //Si la selection du client est conforme :
-  } else {
-    // objet : sélection du client
-    let productSelect = {
-      color: colorsSelect,
-      quantity: Number(quantitySelect),
-      id: idProduct,
-    };
-
-/*Sauvegarder dans le local storage avec set item,
-Avant une sauvegarde de produit vérifier qu'il n'existe pas déjà dans le locale storage avec la méthode find*/ 
-    
-  }
-});
-}
-}
-
-
-function saveProduct (){
-  console.log('TOTOTOTOTO')
+    });
 }
 addToCart();
+
+
+
 
