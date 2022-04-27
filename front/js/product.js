@@ -61,9 +61,22 @@ let colorsSelect = colorsHtml.value;
 const quantityHtml = document.getElementById("quantity");
 let quantitySelect = quantityHtml.value;
 
+//Gestion des alertes:
+const newAlert = document.createElement("p")
+newAlert.style.color = "#3d4c68";
+document.querySelector(".item").replaceChild(newAlert, document.querySelector("article"));
+/*Faire en sorte que l'alerte disparaisse apres affichage
+const endNewAlert = () => {
+  let endNewAlert = document.querySelector("#newAlert");
+  setTimeout(function () {
+      endNewAlert.remove();
+  }, 2500);
+};*/
+
+
 if (colorsSelect == "" || quantitySelect <= 0 || quantitySelect > 100) {
-  newAlert.style.color = "#3d4c68";
   newAlert.innerText = "Pour ajouter votre article, veuillez selectionner une couleur proposée et une quantité comprise entre 1 et 100, merci";
+  /* endNewAlert(); */
   
   //Si la selection du client est conforme :
   } else {
@@ -73,8 +86,6 @@ if (colorsSelect == "" || quantitySelect <= 0 || quantitySelect > 100) {
       quantity: Number(quantitySelect),
       id: idProduct,
     };
-
-    newAlert.style.color = "inherit"; // Pour toutes les alertes qui suivent
 
 /*Sauvegarder dans le local storage avec set item,
 Avant une sauvegarde de produit vérifier qu'il n'existe pas déjà dans le locale storage avec la méthode find*/ 
