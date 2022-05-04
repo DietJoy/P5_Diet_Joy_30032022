@@ -6,7 +6,6 @@ const idProduct = new URL(window.location.href).searchParams.get('id');
 //Création d'une fonction displayProduct pour afficher le produit sur la page
 function displayProduct(myProduct) {
   const productImg = document.createElement('img');
-  const productName = document.getElementsByTagName('title');
   const title = document.querySelector('#title');
   const price = document.querySelector('#price');
   const description = document.querySelector('#description');
@@ -17,17 +16,13 @@ function displayProduct(myProduct) {
   productImg.setAttribute('src', `${myProduct.imageUrl}`);
   productImg.setAttribute('alt', `${myProduct.altTxt}`);
 
-  productName[0].textContent = myProduct.name;
   title.textContent = myProduct.name;
   price.textContent = myProduct.price;
   description.textContent = myProduct.description;
 
   //Affichage des couleurs par Sélection avec une boucle for in
   for (let i in myProduct.colors) {
-    colors.insertAdjacentHTML(
-      'beforeend',
-      `<option value="${myProduct.colors[i]}">${myProduct.colors[i]}</option>`
-    );
+    colors.insertAdjacentHTML('beforeend', `<option value="${myProduct.colors[i]}">${myProduct.colors[i]}</option>`);
   }
 }
 
@@ -64,32 +59,26 @@ function addBasket(product) {
   // On met le contenu du panier dans la variable basket
   let basket = getBasket();
   // On regarde si le produit ajouté au panier existe dans la même couleur ou pas
-  let foundProduct = basket.find(
-    (element) => element.id == product.id && element.color == product.color
-  );
+  let foundProduct = basket.find((element) => element.id == product.id && element.color == product.color);
   // Si oui, on met à jour la quantité
   if (foundProduct != undefined) {
     let newQuantity =
       parseInt(foundProduct.quantity) + parseInt(product.quantity);
     foundProduct.quantity = newQuantity;
     location.reload();
-    window.confirm(
-      `Votre panier a été mis à jour de ${quantity} ${title.textContent} ${color}`
-    );
+    window.confirm(`Votre panier a été mis à jour de ${quantity} ${title.textContent} ${color}`);
   }
   // Si non, on ajoute le produit au panier
   else {
     product.quantity = quantity;
     basket.push(product); // on ajoute notre product à la fin de notre basket
     location.reload();
-    window.confirm(
-      `Votre commande de ${quantity} ${title.textContent} ${color} est ajoutée au panier`
-    );
+    window.confirm(`Votre commande de ${quantity} ${title.textContent} ${color} est ajoutée au panier`);
   }
   saveBasket(basket); // sauvegarde
 }
 
-// Ce que l'on veut dans notre tableau grace au clic de ajouter au panier:
+// Ce que l'on veut dans notre tableau grace au clic de "ajouter au panier":
 function addToCart() {
   // On récupère la quantité choisie par l'utilisateur
   document.getElementById('quantity').addEventListener('change', (event) => {
@@ -115,9 +104,7 @@ function addToCart() {
     }
     // Si l'utilisateur n'a pas choisi de couleur, on lui indique de le faire
     else {
-      window.confirm(
-        'Veuillez sélectionner une couleur et une quantité comprise entre 1 et 100'
-      );
+      window.confirm('Veuillez sélectionner une couleur et une quantité comprise entre 1 et 100');
     }
   });
 }
