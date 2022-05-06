@@ -1,16 +1,16 @@
 //Etape 8 : Afficher un tableau récapitulatif des achats dans la page Panier
 
-const itemsHtml = document.getElementById("cart__items");
+const itemsHtml = document.getElementById('cart__items');
 
 let products = [];
 
 /////////////////////////////////////////////////////
-if (localStorage.getItem("product") === null) {
+if (localStorage.getItem('product') === null) {
   // Vérifier si il y a quelque chose dans le localStorage
-  window.confirm("Votre panier est vide");
+  window.confirm('Votre panier est vide');
 } else {
-  // ----- Gestion du panier-----
-  let localStorageCart = JSON.parse(localStorage.getItem("product"));
+  // Gestion du panier
+  let localStorageCart = JSON.parse(localStorage.getItem('product'));
   let totalQuantity = 0;
   let totalPrice = 0;
 
@@ -25,7 +25,7 @@ if (localStorage.getItem("product") === null) {
       })
 
       .then((productAPI) => {
-        // ----- Affichage du panier-----
+        // Affichage du panier
 
         let priceTotalProductSelect = productAPI.price * productLS.quantity; //  Prix total d'un produit
 
@@ -53,56 +53,78 @@ if (localStorage.getItem("product") === null) {
                       </div>
                     </div>
                   </article>`;
-         
+
         //  Nombre de produits commandés :
-        totalQuantity += productLS.quantity;
-        document.getElementById("totalQuantity").textContent = `${totalQuantity}`;
+        totalQuantity += parseInt(productLS.quantity);
+        document.getElementById(
+          'totalQuantity'
+        ).textContent = `${totalQuantity}`;
 
         //  Prix des produits commandés :
         totalPrice += priceTotalProductSelect;
-        document.getElementById("totalPrice").textContent = `${totalPrice}`;
+        document.getElementById('totalPrice').textContent = `${totalPrice}`;
 
         // Récupère ID du produit à mettre dans un tableau pour passer la requete POST vers l'API
         products.push(productLS.id);
       })
-      .then(() => {
-        // ----- Modification de la quantité ----
 
-        let inputsQuantity = document.querySelectorAll(".itemQuantity");
+      .then(() => {
+        // Etape 9: Modification de la quantité
+
+        let inputsQuantity = document.querySelectorAll('.itemQuantity');
 
         inputsQuantity.forEach((input) => {
-          input.addEventListener("change", (e) => {
-            let articleHMTL = e.target.closest("article");
+          input.addEventListener('change', (e) => {
+            let articleHMTL = e.target.closest('article');
             let articleHTMLId = articleHMTL.dataset.id;
             let articleHTMLcolor = articleHMTL.dataset.color;
             // Trouver le premier article dans le local storage qui respecte la condition
-            let articleChanged = localStorageCart.find((e) => e.id === articleHTMLId && e.color === articleHTMLcolor);
+            let articleChanged = localStorageCart.find(
+              (e) => e.id === articleHTMLId && e.color === articleHTMLcolor
+            );
 
             if (articleChanged !== undefined) {
               articleChanged.quantity = parseInt(e.target.value);
 
               if (articleChanged.quantity > 100) {
-                alert("Votre panier ne pas contenir plus de 100 produits identiques, la quantité à été limitée 100");
+                alert(
+                  'Votre panier ne pas contenir plus de 100 produits identiques, la quantité à été limitée 100'
+                );
                 e.target.value = 100;
                 articleChanged.quantity = parseInt(e.target.value);
-                localStorage.setItem("products", JSON.stringify(localStorageCart));
+                localStorage.setItem(
+                  'products',
+                  JSON.stringify(localStorageCart)
+                );
               } else if (articleChanged.quantity <= 0) {
-                localStorageCart = localStorageCart.filter((e) => !(e.id === articleHTMLId && e.color === articleHTMLcolor));
+                localStorageCart = localStorageCart.filter(
+                  (e) =>
+                    !(e.id === articleHTMLId && e.color === articleHTMLcolor)
+                );
                 articleHMTL.remove();
-                localStorage.setItem("products", JSON.stringify(localStorageCart));
+                localStorage.setItem(
+                  'products',
+                  JSON.stringify(localStorageCart)
+                );
 
                 if (localStorageCart.length < 1) {
-                  localStorage.clear("products");
+                  localStorage.clear('products');
                 }
               } else {
-                localStorage.setItem("products", JSON.stringify(localStorageCart));
+                localStorage.setItem(
+                  'products',
+                  JSON.stringify(localStorageCart)
+                );
               }
             } else {
-              localStorage.clear("products");
-              alert("Désolé, une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard");
+              localStorage.clear('products');
+              alert(
+                "Désolé, une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard"
+              );
             }
             location.reload();
           });
         });
-       }
-      )}) }
+      });
+  });
+} // Fermeture du else du local storage sur la gestion du panier ligne11
