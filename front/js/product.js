@@ -35,7 +35,6 @@ function fetchOneProduct() {
       console.log(error);
     });
 }
-
 fetchOneProduct();
 
 // Étape 7 : Ajouter des produits dans le panier
@@ -100,6 +99,7 @@ function addToCart() {
         quantity: quantity,
         name: document.title,
       };
+      getBasket();
       addBasket(product);
     }
     // Si l'utilisateur n'a pas choisi de couleur, on lui indique de le faire
