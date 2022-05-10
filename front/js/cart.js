@@ -68,9 +68,9 @@ if (localStorage.getItem('product') === null) {
         product.push(productLS.id);
       })
 
+// Etape 9: Modification de la quantité
       .then(() => {
-        // Etape 9: Modification de la quantité
-
+        
         let inputsQuantity = document.querySelectorAll('.itemQuantity');
 
         inputsQuantity.forEach((input) => {
@@ -90,29 +90,21 @@ if (localStorage.getItem('product') === null) {
                 alert('Attention, la quantité à été limitée à 100');
                 e.target.value = 100;
                 articleChanged.quantity = parseInt(e.target.value);
-                localStorage.setItem(
-                  'product',
-                  JSON.stringify(localStorageCart)
-                );
+                localStorage.setItem('product',JSON.stringify(localStorageCart));
+
               } else if (articleChanged.quantity <= 0) {
                 localStorageCart = localStorageCart.filter(
                   (e) =>
                     !(e.id === articleHTMLId && e.color === articleHTMLcolor)
                 );
                 articleHMTL.remove();
-                localStorage.setItem(
-                  'product',
-                  JSON.stringify(localStorageCart)
-                );
+                localStorage.setItem('product',JSON.stringify(localStorageCart));
 
                 if (localStorageCart.length < 1) {
                   localStorage.clear('product');
                 }
               } else {
-                localStorage.setItem(
-                  'product',
-                  JSON.stringify(localStorageCart)
-                );
+                localStorage.setItem('product',JSON.stringify(localStorageCart));
               }
             } else {
               localStorage.clear('product');
@@ -121,10 +113,44 @@ if (localStorage.getItem('product') === null) {
             location.reload();
           });
         });
-      });
 
+   // ----- Suppression d'un article ----
+  let inputsDelete = document.querySelectorAll(".deleteItem");
 
+  inputsDelete.forEach((input) => {
+    input.addEventListener("click", (e) => {
+      let articleHMTL = e.target.closest("article");
+      let articleHTMLId = articleHMTL.dataset.id;
+      let articleHTMLcolor = articleHMTL.dataset.color;
+
+      localStorageCart = localStorageCart.filter((e) => !(e.id === articleHTMLId && e.color === articleHTMLcolor));
+
+      if (localStorageCart.find((e) => e.id === articleHTMLId && e.color === articleHTMLcolor)) {
+        localStorage.clear("product");
+        alert("désolé une erreur s'est produite, nous n'avons pas pu finaliser votre commande, veuillez réessayer plus tard");
+      } else {
+        articleHMTL.remove();
+        localStorage.setItem("product", JSON.stringify(localStorageCart));
+
+        if (localStorageCart.length < 1) {
+          localStorage.clear("product");
+        }
+      }
+      location.reload();
+    });
   });
 
-  
+      }); //fermeture du .then ligne 72
+     
+}); //Fermeture ligne 17 
+
 } // Fermeture du else du local storage sur la gestion du panier ligne11
+
+
+
+
+
+
+
+
+
