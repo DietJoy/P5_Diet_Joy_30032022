@@ -2,7 +2,7 @@
 
 const itemsHtml = document.getElementById('cart__items');
 
-let products = [];
+let product = [];
 
 /////////////////////////////////////////////////////
 if (localStorage.getItem('product') === null) {
@@ -65,7 +65,7 @@ if (localStorage.getItem('product') === null) {
         document.getElementById('totalPrice').textContent = `${totalPrice}`;
 
         // Récupère ID du produit à mettre dans un tableau pour passer la requete POST vers l'API
-        products.push(productLS.id);
+        product.push(productLS.id);
       })
 
       .then(() => {
@@ -87,13 +87,11 @@ if (localStorage.getItem('product') === null) {
               articleChanged.quantity = parseInt(e.target.value);
 
               if (articleChanged.quantity > 100) {
-                alert(
-                  'Votre panier ne pas contenir plus de 100 produits identiques, la quantité à été limitée 100'
-                );
+                alert('Attention, la quantité à été limitée à 100');
                 e.target.value = 100;
                 articleChanged.quantity = parseInt(e.target.value);
                 localStorage.setItem(
-                  'products',
+                  'product',
                   JSON.stringify(localStorageCart)
                 );
               } else if (articleChanged.quantity <= 0) {
@@ -103,28 +101,30 @@ if (localStorage.getItem('product') === null) {
                 );
                 articleHMTL.remove();
                 localStorage.setItem(
-                  'products',
+                  'product',
                   JSON.stringify(localStorageCart)
                 );
 
                 if (localStorageCart.length < 1) {
-                  localStorage.clear('products');
+                  localStorage.clear('product');
                 }
               } else {
                 localStorage.setItem(
-                  'products',
+                  'product',
                   JSON.stringify(localStorageCart)
                 );
               }
             } else {
-              localStorage.clear('products');
-              alert(
-                "Désolé, une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard"
-              );
+              localStorage.clear('product');
+              alert("Désolé, une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard");
             }
             location.reload();
           });
         });
       });
+
+
   });
+
+  
 } // Fermeture du else du local storage sur la gestion du panier ligne11
