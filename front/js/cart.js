@@ -146,6 +146,175 @@ if (localStorage.getItem('product') === null) {
 
 } // Fermeture du else du local storage sur la gestion du panier ligne11
 
+// Etape 10 : Passer la commande
+
+//1.  Selection du bouton Commander
+const btnOrder = document.querySelector("#order");
+
+//2. Selection des inputs du formulaire
+let firstNameInput = document.getElementById("firstName");
+let lastNameInput = document.getElementById("lastName");
+let addressInput = document.getElementById("address");
+let cityInput = document.getElementById("city");
+let emailInput = document.getElementById("email");
+
+// 3. Validation des entrées
+function RegexAlpha(value) {
+  return /^[A-Za-zÀ-ž-'\s]+$/.test(value);
+}
+
+function RegexAlphaNum(value) {
+  return /^[a-zA-ZÀ-ž0-9,'-\s]+$/.test(value);
+}
+
+function RegexEmail(value) {
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z]{2,4}$/.test(value);
+}
+// Vérification du prénom
+function checkFirstName() {
+  if (RegexAlpha(firstNameInput.value)) {
+    firstNameInput.style.border = "medium solid #faa4a4";
+    firstNameInput.nextElementSibling.textContent = "";
+    return true;
+  } else {
+    firstNameInput.nextElementSibling.textContent = "Merci d'entrer un prénom conforme, Ex: Charles, Jean-Pierre, Jean Charles";
+    firstNameInput.style.border = "medium solid #faa4a4";
+    return false;
+  }
+}
+
+firstNameInput.addEventListener("change", () => {
+  checkFirstName();
+});
+
+// Vérification du nom
+function checkLastName() {
+  if (RegexAlpha(lastNameInput.value)) {
+    lastNameInput.style.border = "medium solid #faa4a4";
+    lastNameInput.nextElementSibling.textContent = "";
+    return true;
+  } else {
+    lastNameInput.nextElementSibling.textContent = "Merci d'entrer un nom conforme, Ex: Dupond, Du-Wong, De Lassolle ";
+    lastNameInput.style.border = "medium solid #faa4a4";
+    return false;
+  }
+}
+
+lastNameInput.addEventListener("change", () => {
+  checkLastName();
+});
+
+// Vérification de la ville
+function checkCity() {
+  if (RegexAlphaNum(cityInput.value)) {
+    cityInput.style.border = "medium solid #faa4a4";
+    cityInput.nextElementSibling.textContent = "";
+    return true;
+  } else {
+    cityInput.nextElementSibling.textContent = "Merci d'entrer une ville conforme, Ex: Paris, Paris-V, Paris 5ème";
+    cityInput.style.border = "medium solid #faa4a4";
+    return false;
+  }
+}
+
+cityInput.addEventListener("change", () => {
+  checkCity();
+});
+
+// Vérification de l'adresse
+function checkAddress() {
+  if (RegexAlphaNum(addressInput.value)) {
+    addressInput.style.border = "medium solid #faa4a4";
+    addressInput.nextElementSibling.textContent = "";
+    return true;
+  } else {
+    addressInput.nextElementSibling.textContent = "Merci d'entrer une adresse conforme, Ex: 59 Avenue des tilleuls, Rue Jean-Jaures ";
+    addressInput.style.border = "medium solid #faa4a4";
+    return false;
+  }
+}
+
+addressInput.addEventListener("change", () => {
+  checkAddress();
+});
+
+// Vérification de l'email
+function checkEmail() {
+  if (RegexEmail(emailInput.value)) {
+    emailInput.style.border = "medium solid #faa4a4";
+    emailInput.nextElementSibling.textContent = "";
+    return true;
+  } else {
+    emailInput.nextElementSibling.textContent = "Merci d'entrer un courriel conforme. Ex : contact@kanap.com";
+    emailInput.style.border = "medium solid #faa4a4";
+    return false;
+  }
+}
+
+emailInput.addEventListener("change", () => {
+  checkEmail();
+});
+
+// Création du client
+btnOrder.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  if (checkFirstName() && checkLastName() && checkCity() && checkAddress() && checkEmail()) {
+    let contact = {
+      firstName: firstNameInput.value,
+      lastName: lastNameInput.value,
+      address: addressInput.value,
+      city: cityInput.value,
+      email: emailInput.value,
+    };
+
+    //localStorage.setItem("contact", JSON.stringify(contact));
+
+    if (localStorage.product === undefined) {
+      alert("Votre panier est vide, retrouvez nos produits sur la page d'Accueil");
+      location.href = "./index.html";
+    } else {
+      PostAPI(contact, product);
+    }
+  } else {
+    alert("Vérifiez la saisie du formulaire s'il vous plait");
+    checkFirstName();
+    checkLastName();
+    checkCity();
+    checkAddress();
+    checkEmail();
+  }
+});
+
+// Envoi à l'API du client et produit + récupération du numéro de commande
+function PostAPI(contact, product) {
+  fetch(
+    `http://localhost:3000/api/product/order`,
+
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ contact, product }),
+    }
+  )
+    .then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+
+    .then(function (api) {
+      location.href = `./confirmation.html?id=${api.orderId}`; // Redirige vers la page confirmation avec l'orderId pour pouvoir le récupérer sans le stocker
+    })
+
+    .catch(function (err) {
+      alert("désolé une erreur s'est produite, nous n'avons pas pu finaliser votre commande, veuillez réessayer plus tard");
+      location.href = "./index.html";
+    });
+}
 
 
 

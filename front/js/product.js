@@ -97,7 +97,6 @@ function addToCart() {
         id: idProduct,
         color: color,
         quantity: quantity,
-        name: document.title,
       };
       getBasket();
       addBasket(product);
