@@ -286,10 +286,10 @@ btnOrder.addEventListener("click", (e) => {
   }
 });
 
-// Envoi à l'API du client et produit + récupération du numéro de commande
-function PostAPI(contact, product) {
+// Envoi à l'API du client et des produits + récupération du numéro de commande
+function PostAPI(contact, products) {
   fetch(
-    `http://localhost:3000/api/product/order`,
+    `http://localhost:3000/api/products/order`,
 
     {
       method: "POST",
@@ -297,7 +297,7 @@ function PostAPI(contact, product) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ contact, product }),
+      body: JSON.stringify({ contact, products }),
     }
   )
     .then(function (res) {
@@ -311,13 +311,10 @@ function PostAPI(contact, product) {
     })
 
     .catch(function (err) {
-      alert("désolé une erreur s'est produite, nous n'avons pas pu finaliser votre commande, veuillez réessayer plus tard");
+      alert("Désolé mais une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard");
       location.href = "./index.html";
     });
 }
-
-
-
 
 
 

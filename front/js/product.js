@@ -72,7 +72,7 @@ function addBasket(product) {
     product.quantity = quantity;
     basket.push(product); // on ajoute notre product à la fin de notre basket
     location.reload();
-    window.confirm(`Votre commande de ${quantity} ${title.textContent} ${color} est ajoutée au panier`);
+    window.confirm(`Félicitations! Votre commande de ${quantity} ${title.textContent} ${color} est ajoutée au panier`);
   }
   saveBasket(basket); // sauvegarde
 }
