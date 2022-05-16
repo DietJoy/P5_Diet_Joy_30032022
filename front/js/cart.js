@@ -260,7 +260,7 @@ btnOrder.addEventListener("click", (e) => {
   e.preventDefault();
 
   if (checkFirstName() && checkLastName() && checkCity() && checkAddress() && checkEmail()) {
-    let contact = {
+    const contact = {
       firstName: firstNameInput.value,
       lastName: lastNameInput.value,
       address: addressInput.value,
@@ -311,7 +311,7 @@ function PostAPI(contact, products) {
     })
 
     .catch(function (err) {
-      alert("Désolé mais une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard");
+      alert("Désolé une erreur s'est produite, nous n'avons pas pu finaliser votre commande, veuillez réessayer plus tard");
       location.href = "./index.html";
     });
 }
