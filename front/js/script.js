@@ -1,3 +1,5 @@
+//*Etape 3 : Insérer les produits dans la page d’accueil
+//Création d'une fonction pour insérer les produits
 function displayProducts(dataProduct) {
   if (dataProduct) {
     for (let i = 0; i < dataProduct.length; i += 1) {
@@ -37,13 +39,13 @@ function fetchAllProducts() {
     .then((response) => response.json())
     .then((data) => displayProducts(data))
     .catch(function (error) {
-      console.log(error)
+      console.log(error);
     });
 }
 
 fetchAllProducts();
 
-//Affichage d'un compteur pour le panier de la page d'acueil
+//Me permet d'Afficher un compteur pour le panier sur la page d'acueil
 function numberProductsInCart() {
   let cart = document
     .getElementsByTagName('nav')[0]
