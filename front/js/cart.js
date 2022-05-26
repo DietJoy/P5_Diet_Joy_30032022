@@ -171,7 +171,7 @@ let addressInput = document.getElementById('address');
 let cityInput = document.getElementById('city');
 let emailInput = document.getElementById('email');
 
-// 3. Validation des entrées
+// 3. Fonctions de Validation des entrées
 function RegexAlpha(value) {
   return /^[A-Za-zÀ-ž-'\s]+$/.test(value);
 }
@@ -183,7 +183,7 @@ function RegexAlphaNum(value) {
 function RegexEmail(value) {
   return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z]{2,4}$/.test(value);
 }
-// Vérification du prénom
+// Fonction de Vérification du prénom
 function checkFirstName() {
   if (RegexAlpha(firstNameInput.value)) {
     firstNameInput.style.border = 'medium solid #faa4a4';
@@ -201,7 +201,7 @@ firstNameInput.addEventListener('change', () => {
   checkFirstName();
 });
 
-// Vérification du nom
+// Fonction de Vérification du nom
 function checkLastName() {
   if (RegexAlpha(lastNameInput.value)) {
     lastNameInput.style.border = 'medium solid #faa4a4';
@@ -219,7 +219,7 @@ lastNameInput.addEventListener('change', () => {
   checkLastName();
 });
 
-// Vérification de la ville
+// Fonction de Vérification de la ville
 function checkCity() {
   if (RegexAlphaNum(cityInput.value)) {
     cityInput.style.border = 'medium solid #faa4a4';
@@ -237,7 +237,7 @@ cityInput.addEventListener('change', () => {
   checkCity();
 });
 
-// Vérification de l'adresse
+// Fonction de Vérification de l'adresse
 function checkAddress() {
   if (RegexAlphaNum(addressInput.value)) {
     addressInput.style.border = 'medium solid #faa4a4';
@@ -255,7 +255,7 @@ addressInput.addEventListener('change', () => {
   checkAddress();
 });
 
-// Vérification de l'email
+// Fonction Vérification de l'email
 function checkEmail() {
   if (RegexEmail(emailInput.value)) {
     emailInput.style.border = 'medium solid #faa4a4';

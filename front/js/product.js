@@ -40,8 +40,8 @@ function fetchOneProduct() {
 }
 fetchOneProduct();
 
-// *Étape 7 : Ajouter des produits dans le panier
-// Fonction sauvegarder le panier qui récupère le panier et l'envoie dans le localStorage
+//*Étape 7 : Ajouter des produits dans le panier
+// Fonction 'sauvegarder le panier' qui récupère le panier et l'envoie dans le localStorage
 function saveBasket(basket) {
   localStorage.setItem('product', JSON.stringify(basket));
 }
@@ -113,7 +113,7 @@ function addToCart() {
     // Si l'utilisateur n'a pas choisi de couleur, on lui indique de le faire
     else {
       window.confirm(
-        'Veuillez sélectionner une couleur et une quantité comprise entre 1 et 100'
+        'Veuillez sélectionner une couleur et/ou une quantité comprise entre 1 et 100'
       );
     }
   });
