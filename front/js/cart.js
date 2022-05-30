@@ -1,4 +1,4 @@
-//*Etape 8 : Afficher un tableau récapitulatif des achats dans la page Panier
+///*Etape 8 : Afficher un tableau récapitulatif des achats dans la page Panier
 
 const itemsHtml = document.getElementById('cart__items');
 
@@ -11,8 +11,123 @@ if (localStorage.getItem('product') === null) {
 } else {
   // Gestion du panier
   let localStorageCart = JSON.parse(localStorage.getItem('product'));
-  let totalQuantity = 0;
-  let totalPrice = 0;
+
+  //Fonction pour afficher le panier:
+  function showBasket(productAPI, productLS) {
+    itemsHtml.innerHTML += `<article class="cart__item" data-id="${productLS.id}" data-color="${productLS.color}">
+                <div class="cart__item__img">
+                  <img src="${productAPI.imageUrl}" alt="${productAPI.altTxt}">
+                </div>
+                <div class="cart__item__content">
+                  <div class="cart__item__content__description">
+                    <h2>${productAPI.name}</h2>
+                    <p>Couleur Selectionnée : ${productLS.color}</p>
+                        <div class = "cart__item__content__titlePrice">
+                            <p>Prix Unitaire : ${productAPI.price} €</p>
+                            <p> Prix Total : ${productAPI.price * productLS.quantity} € </p>
+                         </div>
+                  </div>
+                  <div class="cart__item__content__settings">
+                    <div class="cart__item__content__settings__quantity">
+                      <p>Qté : </p>
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productLS.quantity}">
+                    </div>
+                    <div class="cart__item__content__settings__delete">
+                      <p class="deleteItem">Supprimer</p>
+                    </div>
+                  </div>
+                </div>
+              </article>`;
+  }
+
+  //Fonction pour le calcul du panier:
+  function calcBasket(productAPI, productLS) {
+    let totalQuantity = 0;
+    let totalPrice = 0;
+    //  Nombre de produits commandés :
+    totalQuantity += parseInt(productLS.quantity);
+    document.getElementById('totalQuantity').textContent = `${totalQuantity}`;
+
+    //  Prix des produits commandés :
+    totalPrice += productAPI.price * productLS.quantity;
+    document.getElementById('totalPrice').textContent = `${totalPrice}`;
+
+    // Récupère ID du produit à mettre dans un tableau pour passer la requete POST vers l'API
+    product.push(productLS.id);
+  }
+
+  //Fonction pour la modification du panier:
+  function changeBasket() {
+    let inputsQuantity = document.querySelectorAll('.itemQuantity');
+
+    inputsQuantity.forEach((input) => {
+      input.addEventListener('change', (e) => {
+        let articleHMTL = e.target.closest('article');
+        let articleHTMLId = articleHMTL.dataset.id;
+        let articleHTMLcolor = articleHMTL.dataset.color;
+        // Trouver le premier article dans le local storage qui respecte la condition
+        let articleChanged = localStorageCart.find(
+          (e) => e.id === articleHTMLId && e.color === articleHTMLcolor
+        );
+
+        if (articleChanged !== undefined) {
+          articleChanged.quantity = parseInt(e.target.value);
+
+          if (articleChanged.quantity > 100) {
+            alert('Attention, la quantité à été limitée à 100');
+            e.target.value = 100;
+            articleChanged.quantity = parseInt(e.target.value);
+            localStorage.setItem(
+              'product',
+              JSON.stringify(localStorageCart)
+            );
+          } else if (articleChanged.quantity <= 0) {
+            localStorageCart = localStorageCart.filter((e) => !(e.id === articleHTMLId && e.color === articleHTMLcolor));
+            articleHMTL.remove();
+            localStorage.setItem('product', JSON.stringify(localStorageCart));
+
+            if (localStorageCart.length < 1) {
+              localStorage.clear('product');
+            }
+          } else {
+            localStorage.setItem('product', JSON.stringify(localStorageCart));
+          }
+        } else {
+          localStorage.clear('product');
+          alert("Désolé, une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard");
+        }
+        location.reload();
+      });
+    });
+  }
+
+  //Fonction pour la suppression d'un canapé (via le bouton supprimer) dans le panier: 
+  function deleteBasket() {
+    let inputsDelete = document.querySelectorAll('.deleteItem');
+
+    inputsDelete.forEach((input) => {
+      input.addEventListener('click', (e) => {
+        let articleHMTL = e.target.closest('article');
+        let articleHTMLId = articleHMTL.dataset.id;
+        let articleHTMLcolor = articleHMTL.dataset.color;
+
+        localStorageCart = localStorageCart.filter((e) => !(e.id === articleHTMLId && e.color === articleHTMLcolor));
+
+        if (localStorageCart.find((e) => e.id === articleHTMLId && e.color === articleHTMLcolor)) {
+          localStorage.clear('product');
+          alert("désolé une erreur s'est produite, nous n'avons pas pu finaliser votre commande, veuillez réessayer plus tard");
+        } else {
+          articleHMTL.remove();
+          localStorage.setItem('product', JSON.stringify(localStorageCart));
+
+          if (localStorageCart.length < 1) {
+            localStorage.clear('product');
+          }
+        }
+        location.reload();
+      });
+    });
+  }
 
   localStorageCart.forEach((productLS) => {
     // Pour chaque produit dans le local Storage récupérer son id
@@ -23,141 +138,14 @@ if (localStorage.getItem('product') === null) {
           return res.json();
         }
       })
-
       .then((productAPI) => {
         // Affichage du panier
-
-        let priceTotalProductSelect = productAPI.price * productLS.quantity; //  Prix total d'un produit
-
-        itemsHtml.innerHTML += `<article class="cart__item" data-id="${productLS.id}" data-color="${productLS.color}">
-                    <div class="cart__item__img">
-                      <img src="${productAPI.imageUrl}" alt="${productAPI.altTxt}">
-                    </div>
-                    <div class="cart__item__content">
-                      <div class="cart__item__content__description">
-                        <h2>${productAPI.name}</h2>
-                        <p>Couleur Selectionnée : ${productLS.color}</p>
-                            <div class = "cart__item__content__titlePrice">
-                                <p>Prix Unitaire : ${productAPI.price} €</p>
-                                <p> Prix Total : ${priceTotalProductSelect} € </p>
-                             </div>
-                      </div>
-                      <div class="cart__item__content__settings">
-                        <div class="cart__item__content__settings__quantity">
-                          <p>Qté : </p>
-                          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productLS.quantity}">
-                        </div>
-                        <div class="cart__item__content__settings__delete">
-                          <p class="deleteItem">Supprimer</p>
-                        </div>
-                      </div>
-                    </div>
-                  </article>`;
-
-        //  Nombre de produits commandés :
-        totalQuantity += parseInt(productLS.quantity);
-        document.getElementById(
-          'totalQuantity'
-        ).textContent = `${totalQuantity}`;
-
-        //  Prix des produits commandés :
-        totalPrice += priceTotalProductSelect;
-        document.getElementById('totalPrice').textContent = `${totalPrice}`;
-
-        // Récupère ID du produit à mettre dans un tableau pour passer la requete POST vers l'API
-        product.push(productLS.id);
-      })
-
-      //* Etape 9: Modification de la quantité
-      .then(() => {
-        let inputsQuantity = document.querySelectorAll('.itemQuantity');
-
-        inputsQuantity.forEach((input) => {
-          input.addEventListener('change', (e) => {
-            let articleHMTL = e.target.closest('article');
-            let articleHTMLId = articleHMTL.dataset.id;
-            let articleHTMLcolor = articleHMTL.dataset.color;
-            // Trouver le premier article dans le local storage qui respecte la condition
-            let articleChanged = localStorageCart.find(
-              (e) => e.id === articleHTMLId && e.color === articleHTMLcolor
-            );
-
-            if (articleChanged !== undefined) {
-              articleChanged.quantity = parseInt(e.target.value);
-
-              if (articleChanged.quantity > 100) {
-                alert('Attention, la quantité à été limitée à 100');
-                e.target.value = 100;
-                articleChanged.quantity = parseInt(e.target.value);
-                localStorage.setItem(
-                  'product',
-                  JSON.stringify(localStorageCart)
-                );
-              } else if (articleChanged.quantity <= 0) {
-                localStorageCart = localStorageCart.filter(
-                  (e) =>
-                    !(e.id === articleHTMLId && e.color === articleHTMLcolor)
-                );
-                articleHMTL.remove();
-                localStorage.setItem(
-                  'product',
-                  JSON.stringify(localStorageCart)
-                );
-
-                if (localStorageCart.length < 1) {
-                  localStorage.clear('product');
-                }
-              } else {
-                localStorage.setItem(
-                  'product',
-                  JSON.stringify(localStorageCart)
-                );
-              }
-            } else {
-              localStorage.clear('product');
-              alert(
-                "Désolé, une erreur s'est produite, nous n'avons pas pu finalier votre commande, veuillez réessayer plus tard"
-              );
-            }
-            location.reload();
-          });
-        });
-
-        // ----- Suppression d'un article ----
-        let inputsDelete = document.querySelectorAll('.deleteItem');
-
-        inputsDelete.forEach((input) => {
-          input.addEventListener('click', (e) => {
-            let articleHMTL = e.target.closest('article');
-            let articleHTMLId = articleHMTL.dataset.id;
-            let articleHTMLcolor = articleHMTL.dataset.color;
-
-            localStorageCart = localStorageCart.filter(
-              (e) => !(e.id === articleHTMLId && e.color === articleHTMLcolor)
-            );
-
-            if (
-              localStorageCart.find(
-                (e) => e.id === articleHTMLId && e.color === articleHTMLcolor
-              )
-            ) {
-              localStorage.clear('product');
-              alert(
-                "désolé une erreur s'est produite, nous n'avons pas pu finaliser votre commande, veuillez réessayer plus tard"
-              );
-            } else {
-              articleHMTL.remove();
-              localStorage.setItem('product', JSON.stringify(localStorageCart));
-
-              if (localStorageCart.length < 1) {
-                localStorage.clear('product');
-              }
-            }
-            location.reload();
-          });
-        });
-      }); //fermeture du .then ligne 72
-  }); //Fermeture ligne 17
+        showBasket(productAPI, productLS);
+        calcBasket(productAPI, productLS);
+        changeBasket();
+        deleteBasket();
+      });
+  }); //Fermeture l132
 } // Fermeture du else du local storage sur la gestion du panier ligne11
 
 //*Etape 10 : Passer la commande
@@ -323,7 +311,7 @@ function PostAPI(contact, products) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({contact, products}),
+      body: JSON.stringify({ contact, products }),
     }
   )
     .then(function (res) {
