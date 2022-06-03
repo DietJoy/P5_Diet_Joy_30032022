@@ -42,15 +42,20 @@ if (localStorage.getItem('product') === null) {
 
   //Fonction pour le calcul du panier:
   function calcBasket(productAPI, productLS) {
-    let totalQuantity = 0;
-    let totalPrice = 0;
+
+    const totalQuantityDiv = document.getElementById('totalQuantity');
+    const totalPriceDiv = document.getElementById('totalPrice');
+    let totalQuantity = parseInt(totalQuantityDiv.textContent) || 0;
+    let totalPrice = parseInt(totalPriceDiv.textContent) || 0;
+
+
     //  Nombre de produits commandés :
     totalQuantity += parseInt(productLS.quantity);
-    document.getElementById('totalQuantity').textContent = `${totalQuantity}`;
+    totalQuantityDiv.textContent = `${totalQuantity}`;
 
     //  Prix des produits commandés :
     totalPrice += productAPI.price * productLS.quantity;
-    document.getElementById('totalPrice').textContent = `${totalPrice}`;
+    totalPriceDiv.textContent = `${totalPrice}`;
 
     // Récupère ID du produit à mettre dans un tableau pour passer la requete POST vers l'API
     product.push(productLS.id);
